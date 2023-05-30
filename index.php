@@ -1,11 +1,8 @@
 <?php
 
-require __DIR__ . '/common/common.php';
+//$test = 123;
+echo $test;
 
-echo $commonVariable;
-
-echo __FILE__;
-
-commonTest();
+phpinfo();
 
 ?>
