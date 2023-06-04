@@ -8,30 +8,28 @@ header('X-FRAME-OPTIONS:DENY');
 // 連想配列
 if(!empty($_SESSION)){
     echo '<pre>';
-    var_dump($_SESSION) ;
+    var_dump($_SESSION);
     echo '</pre>';
-  }
+}
 
-  function h($str)
-  {
-      return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
-  }
+function h($str)
+{
+	return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+}
 
 
 // 入力(input.php)、確認(confirm.php)、完了(thanks.php)
-// CSRF 偽物のinput.php ->悪意のあるページ　->対策する必要がある、本物？偽物？input.phpなのかを確認する
 // 今回はinput.phpで全てを実行する
 
 $pageFlag = 0;
 
-if(!empty($_POST['btn_confirm'])){    // 空でなかったら[]が実行される
+if(!empty($_POST['btn_confirm'])){  // からでなかったら[]が実行される
     $pageFlag = 1;
 }
 if(!empty($_POST['btn_submit'])){
-        $pageFlag = 2;
-    }
+    $pageFlag = 2;
+}
 
-    
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +38,9 @@ if(!empty($_POST['btn_submit'])){
 <body>
 
 
-<?php if($pageFlag === 1 ) : ?>
+
+
+<?php if($pageFlag === 1) : ?>
 <?php if($_POST['csrf'] === $_SESSION['csrfToken']) :?>
 <form method="POST" action="input.php">
 氏名
@@ -60,7 +60,7 @@ if(!empty($_POST['btn_submit'])){
 
 <?php endif; ?>
 
-<?php if($pageFlag === 2 ) : ?>
+<?php if($pageFlag === 2) : ?>
 <?php if($_POST['csrf'] === $_SESSION['csrfToken']) :?>
 送信が完了しました。
 
@@ -69,21 +69,21 @@ if(!empty($_POST['btn_submit'])){
 <?php endif; ?>
 
 
-<?php if($pageFlag === 0 ) : ?>
+<?php if($pageFlag === 0) : ?>
 <?php
-if(!isset($_SESSION['csrfToken'])){
-  $csrfToken = bin2hex(random_bytes(32));
-  $_SESSION['csrfToken'] = $csrfToken;
+if(!isset($_SESSION['csrfToken'])){          // csrfトークンが設定されていなかったらトークンを使って合言葉を作る
+    $csrfToken = bin2hex(random_bytes(32)); // 24or32
+    $_SESSION['csrfToken'] = $csrfToken;
 }
-$token = $_SESSION['csrfToken'];
+$token = $_SESSION['csrfToken'];  // 変数のトークン（$token）の中に作ったcsrfTokenが含まれる
 ?>
 
 <form method="POST" action="input.php">
 氏名
-<input type="text" name="your_name" value="<?php if(!empty($_POST['your_name'])){echo h($_POST['your_name']) ;} ?>">
+<input type="text" name="your_name" value="<?php if(!empty($_POST['your_name'])){echo h($_POST['your_name']) ;}?>">
 <br>
 メールアドレス
-<input type="email" name="email" value="<?php if(!empty($_POST['email'])){echo h($_POST['email']) ;} ?>">
+<input type="email" name="email" value="<?php if(!empty($_POST['email'])){echo h($_POST['email']) ;}?>">
 <br>
 <input type="submit" name="btn_confirm" value="確認する">
 <input type="hidden" name="csrf" value="<?php echo $token; ?>">
