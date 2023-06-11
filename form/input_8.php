@@ -2,8 +2,6 @@
 
 session_start();
 
-require 'validation.php';
-
 header('X-FRAME-OPTIONS:DENY');
 
 // スーパーグローバル変数 php 9種類
@@ -24,9 +22,8 @@ function h($str)
 // 今回はinput.phpで全てを実行する
 
 $pageFlag = 0;
-$erros = validation($_POST);
 
-if(!empty($_POST['btn_confirm']) && empty($errors)){  // からでなかったら[]が実行される
+if(!empty($_POST['btn_confirm'])){  // からでなかったら[]が実行される
     $pageFlag = 1;
 }
 if(!empty($_POST['btn_submit'])){
@@ -56,7 +53,7 @@ if(!empty($_POST['btn_submit'])){
 <?php echo h($_POST['url']) ;?>
 <br>
 性別
-<?php 
+<?php
     if($_POST['gender'] === '0'){ echo '男性'; }
     if($_POST['gender'] === '1'){ echo '女性'; }
 ?>
@@ -70,7 +67,6 @@ if(!empty($_POST['btn_submit'])){
     if($_POST['age'] === '5'){ echo '50歳〜59歳' ;}
     if($_POST['age'] === '6'){ echo '60歳〜' ;}
 ?>
-
 <br>
 お問い合わせ内容
 <?php echo h($_POST['contact']) ;?>
@@ -110,17 +106,6 @@ if(!isset($_SESSION['csrfToken'])){          // csrfトークンが設定され�
 $token = $_SESSION['csrfToken'];  // 変数のトークン（$token）の中に作ったcsrfTokenが含まれる
 ?>
 
-<?php if(!empty($errors) && !empty($_POST['btn_confirm']) ) : ?>
-<?php echo '<ul>' ;?>
-<?php
-    foreach($errors as $error){
-        echo '<li>' . $error . '</li>' ;
-    }
-?>
-<?php echo '</ul>' ;?>
-
-<?php endif ;?>
-
 <form method="POST" action="input.php">
 氏名
 <input type="text" name="your_name" value="<?php if(!empty($_POST['your_name'])){echo h($_POST['your_name']) ;}?>">
@@ -142,22 +127,20 @@ $token = $_SESSION['csrfToken'];  // 変数のトークン（$token）の中に�
 年齢
 <select name="age">
     <option value="">選択してください</option>
-    <option value="1">〜19歳</option>
+    <option value="1" selected>〜19歳</option>
     <option value="2">20歳〜29歳</option>
     <option value="3">30歳〜39歳</option>
     <option value="4">40歳〜49歳</option>
     <option value="5">50歳〜59歳</option>
     <option value="6">60歳〜</option>
 </select>
-<br>
 お問い合わせ内容
 <textarea name="contact">
-<?php if(!empty($_POST['contact'])){echo h($_POST['contact']) ;} ?>
+<?php if(!empty($_POST['contact'])){echo h($_POST['contact']) ;}?>
 </textarea>
 <br>
 <input type="checkbox" name="caution" value="1">注意事項にチェックする
 <br>
-
 <input type="submit" name="btn_confirm" value="確認する">
 <input type="hidden" name="csrf" value="<?php echo $token; ?>">
 </form>
