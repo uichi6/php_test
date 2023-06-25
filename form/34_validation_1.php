@@ -84,12 +84,10 @@ if(!empty($_POST['btn_submit'])){
 <input type="hidden" name="gender" value="<?php echo h($_POST['gender']) ;?>">
 <input type="hidden" name="age" value="<?php echo h($_POST['age']) ;?>">
 <input type="hidden" name="contact" value="<?php echo h($_POST['contact']) ;?>">
-
 <input type="hidden" name="csrf" value="<?php echo h($_POST['csrf']) ;?>">
 </form>
 
 <?php endif; ?>
-
 <?php endif; ?>
 
 <?php if($pageFlag === 2) : ?>
